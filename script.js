@@ -15,7 +15,7 @@ const player = (name, symbol) => {
   return { name, symbol, makeMove };
 };
 
-const gameController = () => {
+const gameController = (() => {
   // module pattern
   return {};
-};
+})();
