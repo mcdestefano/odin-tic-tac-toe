@@ -58,8 +58,7 @@ const gameController = ((p1, p2) => {
   };
   const displayGameState = () => {
     // update display with new mark
-    const gameOver = gameBoard.isGameOver();
-    if (gameOver) {
+    if (gameBoard.isGameOver()) {
       // disable board and display winner
     } else {
       switchPlayer();
