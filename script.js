@@ -5,28 +5,24 @@ const gameBoard = (() => {
     board[index] = symbol;
   };
   const isGameOver = () => {
-    switch (true) {
-      case board[0] === board[1] && board[1] === board[2]:
+    return (
       // top row
-      case board[3] === board[4] && board[4] === board[5]:
+      (board[0] === board[1] && board[1] === board[2]) ||
       // middle row
-      case board[6] === board[7] && board[7] === board[8]:
+      (board[3] === board[4] && board[4] === board[5]) ||
       // bottom row
-      case board[0] === board[3] && board[3] === board[6]:
+      (board[6] === board[7] && board[7] === board[8]) ||
       // left column
-      case board[1] === board[4] && board[4] === board[7]:
+      (board[0] === board[3] && board[3] === board[6]) ||
       // center column
-      case board[2] === board[5] && board[5] === board[8]:
+      (board[1] === board[4] && board[4] === board[7]) ||
       // right column
-      case board[0] === board[4] && board[4] === board[8]:
+      (board[2] === board[5] && board[5] === board[8]) ||
       // diagonal, tl to br
-      case board[2] === board[4] && board[4] === board[6]:
-        // diagonal, tr to bl
-        return true;
-      default:
-        // not a game end state
-        return false;
-    }
+      (board[0] === board[4] && board[4] === board[8]) ||
+      // diagonal, tr to bl)
+      (board[2] === board[4] && board[4] === board[6])
+    );
   };
   return { board, addMark, isGameOver };
 })();
