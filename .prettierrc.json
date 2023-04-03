@@ -1,5 +1,6 @@
 {
-    "trailingComma": "es5",
+    "trailingComma": "none",
+    "//alt_opt_for_trailing_comma": "es5",
     "tabWidth": 2,
     "semi": true,
     "singleQuote": true
