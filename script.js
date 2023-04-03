@@ -64,21 +64,27 @@ const gameController = ((p1, p2) => {
       activePlayer = p1;
     }
   };
-  const displayGameState = () => {
-    // update display with new board state...
+  const displayGameState = (index) => {
+    gameBoard.addMark(activePlayer.symbol, index);
+    let counter = 0;
+    spots.forEach((square) => {
+      square.textContent = gameBoard.board[counter];
+      counter++;
+    });
     if (gameBoard.isGameOver()) {
       // disable board and display winner...
     } else {
       switchPlayer();
     }
   };
-  return { activePlayer, displayGameState };
+  return { displayGameState };
 })();
 
 const spots = document.querySelectorAll('.spot');
+const spotsArray = [...spots];
 spots.forEach((square) => {
   square.addEventListener('click', () => {
-    gameController.displayGameState();
+    gameController.displayGameState(spotsArray.indexOf(square));
     // disable this event listener? or just add conditional?
   });
 });
