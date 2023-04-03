@@ -13,6 +13,7 @@
     "rules": {
         "no-unused-vars": "off",
         "space-before-function-paren": "off",
-        "semi": "off"
+        "semi": "off",
+        "no-fallthrough": "off"
     }
 }

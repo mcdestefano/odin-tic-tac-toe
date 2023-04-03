@@ -7,32 +7,25 @@ const gameBoard = (() => {
   const isGameOver = () => {
     switch (true) {
       case board[0] === board[1] && board[1] === board[2]:
-        // top row
-        break;
+      // top row
       case board[3] === board[4] && board[4] === board[5]:
-        // middle row
-        break;
+      // middle row
       case board[6] === board[7] && board[7] === board[8]:
-        // bottom row
-        break;
+      // bottom row
       case board[0] === board[3] && board[3] === board[6]:
-        // left column
-        break;
+      // left column
       case board[1] === board[4] && board[4] === board[7]:
-        // center column
-        break;
+      // center column
       case board[2] === board[5] && board[5] === board[8]:
-        // right column
-        break;
+      // right column
       case board[0] === board[4] && board[4] === board[8]:
-        // diagonal, tl to br
-        break;
+      // diagonal, tl to br
       case board[2] === board[4] && board[4] === board[6]:
         // diagonal, tr to bl
-        break;
+        return true;
       default:
         // not a game end state
-        break;
+        return false;
     }
   };
   return { board, addMark, isGameOver };
@@ -62,7 +55,6 @@ const gameController = ((p1, p2) => {
       // disable board and display winner
     } else {
       switchPlayer();
-      // switch active player to other player
     }
   };
   return { activePlayer, displayGameState };
