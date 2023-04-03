@@ -37,9 +37,9 @@ const gameBoard = (() => {
       (board[1] !== null && board[1] === board[4] && board[4] === board[7]) ||
       // right column
       (board[2] !== null && board[2] === board[5] && board[5] === board[8]) ||
-      // diagonal, tl to br
+      // diagonal, lt to rb
       (board[0] !== null && board[0] === board[4] && board[4] === board[8]) ||
-      // diagonal, tr to bl)
+      // diagonal, rt to lb)
       (board[2] !== null && board[2] === board[4] && board[4] === board[6])
     );
   };
@@ -56,7 +56,7 @@ const player = (name, symbol) => {
 
 const gameController = ((p1, p2) => {
   // module pattern
-  let activePlayer = p1;
+  let activePlayer = p1; // how to do players?
   const switchPlayer = () => {
     if (activePlayer === p1) {
       activePlayer = p2;
@@ -65,12 +65,20 @@ const gameController = ((p1, p2) => {
     }
   };
   const displayGameState = () => {
-    // update display with new mark
+    // update display with new board state...
     if (gameBoard.isGameOver()) {
-      // disable board and display winner
+      // disable board and display winner...
     } else {
       switchPlayer();
     }
   };
   return { activePlayer, displayGameState };
 })();
+
+const spots = document.querySelectorAll('.spot');
+spots.forEach((square) => {
+  square.addEventListener('click', () => {
+    gameController.displayGameState();
+    // disable this event listener? or just add conditional?
+  });
+});
