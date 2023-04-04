@@ -54,37 +54,54 @@ const player = (name, symbol) => {
   return { name, symbol, makeMove };
 };
 
-const gameController = ((p1, p2) => {
+const gameController = (() => {
   // module pattern
-  let activePlayer = p1; // how to do players?
+  let player1;
+  let player2; // how to tie this to players created from button?
+  let activePlayer;
+  const getPlayers = (p1, p2) => {
+    // not working...
+    player1 = p1;
+    player2 = p2;
+    activePlayer = player1;
+  };
   const switchPlayer = () => {
-    if (activePlayer === p1) {
-      activePlayer = p2;
+    if (activePlayer === player1) {
+      activePlayer = player2;
     } else {
-      activePlayer = p1;
+      activePlayer = player1;
     }
   };
-  const displayGameState = (index) => {
-    gameBoard.addMark(activePlayer.symbol, index);
-    let counter = 0;
-    spots.forEach((square) => {
-      square.textContent = gameBoard.board[counter];
-      counter++;
-    });
+  const sendMove = (index) => {
+    activePlayer.makeMove(index);
     if (gameBoard.isGameOver()) {
       // disable board and display winner...
     } else {
       switchPlayer();
     }
+    return activePlayer.symbol;
   };
-  return { displayGameState };
+  return { player1, getPlayers, sendMove }; // player1 just for testing
 })();
 
-const spots = document.querySelectorAll('.spot');
-const spotsArray = [...spots];
-spots.forEach((square) => {
-  square.addEventListener('click', () => {
-    gameController.displayGameState(spotsArray.indexOf(square));
-    // disable this event listener? or just add conditional?
+const userInterface = (() => {
+  const playerSelection = document.querySelector('.player-selection');
+  const player1Display = document.querySelector('#p1');
+  const player2Display = document.querySelector('#p2');
+  const submitButton = document.querySelector('.submit');
+  submitButton.addEventListener('click', () => {
+    const player1 = player(player1Display.value, 'X');
+    const player2 = player(player2Display.value, 'O');
+    gameController.getPlayers(player1, player2);
+    playerSelection.ariaHidden = true; // not working right...
   });
-});
+  const spots = document.querySelectorAll('.spot');
+  const spotsArray = [...spots];
+  spots.forEach((square) => {
+    square.addEventListener('click', () => {
+      const mark = gameController.sendMove(spotsArray.indexOf(square));
+      square.textContent = mark;
+      // disable this event listener? or just add conditional?
+    });
+  });
+})();
