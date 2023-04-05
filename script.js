@@ -87,10 +87,11 @@ const gameController = (() => {
     const mark = activePlayer.symbol;
     if (gameBoard.isWin()) {
       // alerts don't work, too fast!!
-      // disable board...
+      // i think disabling might be happening a step too soon...
+      gameBoard.disableBoard();
       alert(`Congrats ${activePlayer.name}, you win!`);
     } else if (gameBoard.isDraw()) {
-      // disable board...
+      gameBoard.disableBoard();
       alert("It's a draw! Click reset to play again.");
     } else {
       switchPlayer();
@@ -120,9 +121,17 @@ const userInterface = (() => {
       if (mark != null) {
         square.textContent = mark;
       } else {
+        // only want this to fire if game didn't just finish...
         alert('This spot is taken, try again in an open spot');
       }
-      // disable this event listener? or just add conditional?
     });
   });
+  // need to implement reset button...
+  const disableBoard = () => {
+    spots.forEach((square) => {
+      // this is acting wacky...
+      square.style.pointerEvents = 'none';
+    });
+  };
+  return { disableBoard };
 })();

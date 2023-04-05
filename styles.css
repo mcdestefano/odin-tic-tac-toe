@@ -3,6 +3,15 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    background-color: rgb(189, 189, 207);
+    font-family: 'Courier New', Courier, monospace;
+    color:rgb(64, 64, 102)
+}
+
+button {
+    border-radius: 5px;
+    border-color: rgb(64, 64, 102);
+    background-color: rgb(148, 148, 230);
 }
 
 .player-selection {
@@ -15,9 +24,9 @@ body {
 .board {
     display: grid;
     grid-template: repeat(3, minmax(100px, 1fr)) / repeat(3, minmax(100px, 1fr));
-    border: solid black 1px;
+    border: solid rgb(64, 64, 102) 1px;
     grid-gap: 1px;
-    background-color: black;
+    background-color: rgb(64, 64, 102);
 }
 
 .spot {
@@ -25,4 +34,5 @@ body {
     display: grid;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
 }
