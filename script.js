@@ -23,6 +23,9 @@ const gameBoard = (() => {
   const addMark = (symbol, index) => {
     board[index] = symbol;
   };
+  const isSpotTaken = (index) => {
+    return board[index];
+  };
   const isGameOver = () => {
     return (
       // top row
@@ -43,13 +46,13 @@ const gameBoard = (() => {
       (board[2] !== null && board[2] === board[4] && board[4] === board[6])
     );
   };
-  return { board, addMark, isGameOver };
+  return { board, addMark, isSpotTaken, isGameOver };
 })();
 
 const player = (name, symbol) => {
   // factory function
   const makeMove = (index) => {
-    gameBoard.addMark(this.symbol, index);
+    gameBoard.addMark(symbol, index);
   };
   return { name, symbol, makeMove };
 };
@@ -57,10 +60,9 @@ const player = (name, symbol) => {
 const gameController = (() => {
   // module pattern
   let player1;
-  let player2; // how to tie this to players created from button?
+  let player2;
   let activePlayer;
-  const getPlayers = (p1, p2) => {
-    // not working...
+  const setPlayers = (p1, p2) => {
     player1 = p1;
     player2 = p2;
     activePlayer = player1;
@@ -73,34 +75,43 @@ const gameController = (() => {
     }
   };
   const sendMove = (index) => {
+    if (gameBoard.isSpotTaken(index)) {
+      return null;
+    }
     activePlayer.makeMove(index);
+    const mark = activePlayer.symbol;
     if (gameBoard.isGameOver()) {
       // disable board and display winner...
     } else {
       switchPlayer();
     }
-    return activePlayer.symbol;
+    return mark;
   };
-  return { player1, getPlayers, sendMove }; // player1 just for testing
+  return { setPlayers, sendMove };
 })();
 
 const userInterface = (() => {
-  const playerSelection = document.querySelector('.player-selection');
   const player1Display = document.querySelector('#p1');
   const player2Display = document.querySelector('#p2');
   const submitButton = document.querySelector('.submit');
   submitButton.addEventListener('click', () => {
     const player1 = player(player1Display.value, 'X');
     const player2 = player(player2Display.value, 'O');
-    gameController.getPlayers(player1, player2);
-    playerSelection.ariaHidden = true; // not working right...
+    gameController.setPlayers(player1, player2);
+    player1Display.readOnly = true;
+    player2Display.readOnly = true;
+    submitButton.disabled = true;
   });
   const spots = document.querySelectorAll('.spot');
   const spotsArray = [...spots];
   spots.forEach((square) => {
     square.addEventListener('click', () => {
       const mark = gameController.sendMove(spotsArray.indexOf(square));
-      square.textContent = mark;
+      if (mark != null) {
+        square.textContent = mark;
+      } else {
+        alert('This spot is taken, try again in an open spot');
+      }
       // disable this event listener? or just add conditional?
     });
   });
