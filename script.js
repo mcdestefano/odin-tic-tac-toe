@@ -26,7 +26,12 @@ const gameBoard = (() => {
   const isSpotTaken = (index) => {
     return board[index];
   };
-  const isGameOver = () => {
+  const isDraw = () => {
+    return board.every((elt) => {
+      return elt != null;
+    });
+  };
+  const isWin = () => {
     return (
       // top row
       (board[0] !== null && board[0] === board[1] && board[1] === board[2]) ||
@@ -46,7 +51,7 @@ const gameBoard = (() => {
       (board[2] !== null && board[2] === board[4] && board[4] === board[6])
     );
   };
-  return { board, addMark, isSpotTaken, isGameOver };
+  return { board, addMark, isSpotTaken, isDraw, isWin };
 })();
 
 const player = (name, symbol) => {
@@ -80,8 +85,13 @@ const gameController = (() => {
     }
     activePlayer.makeMove(index);
     const mark = activePlayer.symbol;
-    if (gameBoard.isGameOver()) {
-      // disable board and display winner...
+    if (gameBoard.isWin()) {
+      // alerts don't work, too fast!!
+      // disable board...
+      alert(`Congrats ${activePlayer.name}, you win!`);
+    } else if (gameBoard.isDraw()) {
+      // disable board...
+      alert("It's a draw! Click reset to play again.");
     } else {
       switchPlayer();
     }
