@@ -87,11 +87,10 @@ const gameController = (() => {
     const mark = activePlayer.symbol;
     if (gameBoard.isWin()) {
       // alerts don't work, too fast!!
-      // i think disabling might be happening a step too soon...
-      gameBoard.disableBoard();
+      userInterface.disableBoard();
       alert(`Congrats ${activePlayer.name}, you win!`);
     } else if (gameBoard.isDraw()) {
-      gameBoard.disableBoard();
+      userInterface.disableBoard();
       alert("It's a draw! Click reset to play again.");
     } else {
       switchPlayer();
@@ -112,20 +111,23 @@ const userInterface = (() => {
     player1Display.readOnly = true;
     player2Display.readOnly = true;
     submitButton.disabled = true;
+    enableBoard();
   });
   const spots = document.querySelectorAll('.spot');
-  const spotsArray = [...spots];
-  spots.forEach((square) => {
-    square.addEventListener('click', () => {
-      const mark = gameController.sendMove(spotsArray.indexOf(square));
-      if (mark != null) {
-        square.textContent = mark;
-      } else {
-        // only want this to fire if game didn't just finish...
-        alert('This spot is taken, try again in an open spot');
-      }
+  const enableBoard = () => {
+    const spotsArray = [...spots];
+    spots.forEach((square) => {
+      square.addEventListener('click', () => {
+        const mark = gameController.sendMove(spotsArray.indexOf(square));
+        if (mark != null) {
+          square.textContent = mark;
+        } else {
+          // only want this to fire if game didn't just finish...
+          alert('This spot is taken, try again in an open spot');
+        }
+      });
     });
-  });
+  };
   // need to implement reset button...
   const disableBoard = () => {
     spots.forEach((square) => {
