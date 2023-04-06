@@ -51,7 +51,10 @@ const gameBoard = (() => {
       (board[2] !== null && board[2] === board[4] && board[4] === board[6])
     );
   };
-  return { board, addMark, isSpotTaken, isDraw, isWin };
+  const wipe = () => {
+    board.fill(null);
+  };
+  return { board, addMark, isSpotTaken, isDraw, isWin, wipe };
 })();
 
 const player = (name, symbol) => {
@@ -97,13 +100,23 @@ const gameController = (() => {
     }
     return mark;
   };
-  return { setPlayers, sendMove };
+  const clearBoard = () => {
+    gameBoard.wipe();
+    activePlayer = player1;
+    userInterface.whoseTurn(activePlayer);
+    userInterface.resetBoard();
+  };
+  return { setPlayers, sendMove, clearBoard };
 })();
 
 const userInterface = (() => {
   const player1Display = document.querySelector('#p1');
   const player2Display = document.querySelector('#p2');
   const submitButton = document.querySelector('.submit');
+  const prompt = document.querySelector('.prompt');
+  const spots = document.querySelectorAll('.spot');
+  const spotsArray = [...spots];
+  const resetButton = document.querySelector('.reset');
   submitButton.addEventListener('click', () => {
     const player1 = player(player1Display.value, 'X');
     const player2 = player(player2Display.value, 'O');
@@ -114,7 +127,9 @@ const userInterface = (() => {
     whoseTurn(player1);
     enableBoard();
   });
-  const prompt = document.querySelector('.prompt');
+  resetButton.addEventListener('click', () => {
+    gameController.clearBoard();
+  });
   const whoseTurn = (pl) => {
     prompt.textContent = `${pl.name}'s Turn (${pl.symbol})`;
   };
@@ -124,9 +139,7 @@ const userInterface = (() => {
   const displayWinner = (pl) => {
     prompt.textContent = `Congratulations ${pl.name}, you win! Click Reset Game to play again.`;
   };
-  const spots = document.querySelectorAll('.spot');
   const enableBoard = () => {
-    const spotsArray = [...spots];
     spots.forEach((square) => {
       square.addEventListener('click', () => {
         const mark = gameController.sendMove(spotsArray.indexOf(square));
@@ -138,11 +151,16 @@ const userInterface = (() => {
       });
     });
   };
+  const resetBoard = () => {
+    spots.forEach((square) => {
+      square.textContent = '';
+      square.style.pointerEvents = 'auto';
+    });
+  };
   const disableBoard = () => {
     spots.forEach((square) => {
       square.style.pointerEvents = 'none';
     });
   };
-  // need to implement reset button...
-  return { whoseTurn, displayDraw, displayWinner, disableBoard };
+  return { whoseTurn, displayDraw, displayWinner, resetBoard, disableBoard };
 })();
