@@ -78,6 +78,7 @@ const gameController = (() => {
     } else {
       activePlayer = player1;
     }
+    userInterface.whoseTurn(activePlayer);
   };
   const sendMove = (index) => {
     if (gameBoard.isSpotTaken(index)) {
@@ -86,12 +87,11 @@ const gameController = (() => {
     activePlayer.makeMove(index);
     const mark = activePlayer.symbol;
     if (gameBoard.isWin()) {
-      // alerts don't work, too fast!!
       userInterface.disableBoard();
-      alert(`Congrats ${activePlayer.name}, you win!`);
+      userInterface.displayWinner(activePlayer);
     } else if (gameBoard.isDraw()) {
       userInterface.disableBoard();
-      alert("It's a draw! Click reset to play again.");
+      userInterface.displayDraw();
     } else {
       switchPlayer();
     }
@@ -111,8 +111,19 @@ const userInterface = (() => {
     player1Display.readOnly = true;
     player2Display.readOnly = true;
     submitButton.disabled = true;
+    whoseTurn(player1);
     enableBoard();
   });
+  const prompt = document.querySelector('.prompt');
+  const whoseTurn = (pl) => {
+    prompt.textContent = `${pl.name}'s Turn (${pl.symbol})`;
+  };
+  const displayDraw = () => {
+    prompt.textContent = "It's a draw! Click Reset Game to play again.";
+  };
+  const displayWinner = (pl) => {
+    prompt.textContent = `Congratulations ${pl.name}, you win! Click Reset Game to play again.`;
+  };
   const spots = document.querySelectorAll('.spot');
   const enableBoard = () => {
     const spotsArray = [...spots];
@@ -122,18 +133,16 @@ const userInterface = (() => {
         if (mark != null) {
           square.textContent = mark;
         } else {
-          // only want this to fire if game didn't just finish...
           alert('This spot is taken, try again in an open spot');
         }
       });
     });
   };
-  // need to implement reset button...
   const disableBoard = () => {
     spots.forEach((square) => {
-      // this is acting wacky...
       square.style.pointerEvents = 'none';
     });
   };
-  return { disableBoard };
+  // need to implement reset button...
+  return { whoseTurn, displayDraw, displayWinner, disableBoard };
 })();

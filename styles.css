@@ -21,6 +21,12 @@ button {
     gap: 10px;
 }
 
+.prompt {
+    width: 500px;
+    height: auto;
+    text-align: center;
+}
+
 .board {
     display: grid;
     grid-template: repeat(3, minmax(100px, 1fr)) / repeat(3, minmax(100px, 1fr));
